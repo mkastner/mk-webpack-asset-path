@@ -4,5 +4,8 @@
   "description": "generating the file path based on map in webpack-assets.json",
   "main": "index.js",
   "author": "John Galt",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+      "github": "git push -u origin master"
+  }
 }
