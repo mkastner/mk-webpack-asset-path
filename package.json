@@ -1,11 +1,15 @@
 {
   "name": "mk-webpack-asset-path",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "generating the file path based on map in webpack-assets.json",
   "main": "index.js",
   "author": "John Galt",
   "license": "MIT",
   "scripts": {
-      "github": "git push -u origin master"
+    "github": "git push -u origin master",
+    "test": "NODE_ENV=production node test"
+  },
+  "devDependencies": {
+    "tape": "^4.8.0"
   }
 }

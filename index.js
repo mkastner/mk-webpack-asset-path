@@ -1,8 +1,7 @@
-/*jslint node: true, strict:implied, esversion: 6 */
-
-var path = require('path'),
-    env = process.env.NODE_ENV || 'development',
-    webpackDigest = null;
+const
+  path = require('path'),
+  env = process.env.NODE_ENV || 'development',
+  defaultDigestPath = 'public/build/webpack-assets.json';
 
 /**
  * generating the file path based on map in webpack-assets.json, which is
@@ -13,26 +12,48 @@ var path = require('path'),
  * in production mode.
  * @param {string} assetName the file name
  * @param {string} assetType the file extension without dot
+ * @param {string} customDigestPath if path is not defaultDigestPath
  * @return {string} the file path
  */
-function assetPath(assetName, assetType) {
+function assetPath(assetName, assetType, customDigestPath) {
 
-    if (env === 'production') {
+  let
+    digestPath = customDigestPath || defaultDigestPath,
+    prodAssetPath = '',
+    webpackDigest;
 
-        try {
-            webpackDigest =
-                webpackDigest || require(path.resolve('public/build/webpack-assets.json'));
-            let prodAssetPath = webpackDigest[assetName][assetType];
+  if (env === 'production') {
 
-            return prodAssetPath;
+    try {
+      webpackDigest =
+        webpackDigest || require(path.resolve(digestPath));
 
-        } catch (err) {
-            console.error(err);
-            console.error(err.stack);
-        }
+      if (!webpackDigest) {
+        throw new Error(`webpackDigest not found with path "${digestPath}"`);
+      }
+
+      if (!webpackDigest[assetName]) {
+        throw new Error(`webpackDigest asset not found with assetName "${assetName}"`);
+      }
+
+      if (!webpackDigest[assetName][assetType]) {
+        throw new Error(`webpackDigest assetName "${assetName}" not found with assetType "${assetType}"`);
+      }
+
+      prodAssetPath = webpackDigest[assetName][assetType];
+
+    } catch (err) {
+      console.error(err);
+      console.error(err.stack);
+
+      prodAssetPath = "assetPath error could not find asset path";
+
+    } finally {
+      return prodAssetPath;
     }
+  }
 
-    return '/build/' + assetName + '.' + assetType;
+  return '/build/' + assetName + '.' + assetType;
 
 }
 

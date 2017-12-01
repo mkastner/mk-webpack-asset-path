@@ -1,0 +1,8 @@
+{
+  "public": {
+    "js": "/build/public-aaa.js"
+  },
+  "admin": {
+    "js": "/build/admin-aaa.js"
+  }
+}
